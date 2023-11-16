@@ -1,0 +1,5 @@
+# Set all text files to use LF on checkout and CRLF on checkin
+* text=auto eol=lf
+
+# Explicitly specify files with specific line-ending needs
+*.txt text eol=crlf
