@@ -7,3 +7,7 @@ export const TASK_ROUTES = {
   TASK_ID: '/:id',
   TASK_UPDATE_STATUS: '/:id/status'
 };
+
+export const TASK_PARAMS = {
+  ID: 'id'
+};

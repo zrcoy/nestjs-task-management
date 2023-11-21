@@ -5,7 +5,7 @@ import { AuthCredentialsDTO } from './dto/auth-credentials.dto';
 
 @Controller(AUTH_ROUTES.AUTH_ROOT)
 export class AuthController {
-  public constructor(private readonly authService: AuthService) {}
+  public constructor(private authService: AuthService) {}
 
   @Post(AUTH_ROUTES.AUTH_SIGN_UP)
   public signUp(@Body() authCredentialsDTO: AuthCredentialsDTO): Promise<void> {
@@ -15,7 +15,7 @@ export class AuthController {
   @Post(AUTH_ROUTES.AUTH_SIGN_IN)
   public signIn(
     @Body() authCredentialsDTO: AuthCredentialsDTO
-  ): Promise<string> {
+  ): Promise<{ accessToken: string }> {
     return this.authService.signIn(authCredentialsDTO);
   }
 }
