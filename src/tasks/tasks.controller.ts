@@ -17,7 +17,7 @@ import { TasksService } from './tasks.service';
 
 @Controller('tasks')
 export class TasksController {
-  public constructor(private tasksService: TasksService) {}
+  public constructor(private readonly tasksService: TasksService) {}
 
   @Get()
   public getTasks(

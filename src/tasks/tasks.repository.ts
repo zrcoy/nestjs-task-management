@@ -17,7 +17,7 @@ export class TaskRepository {
   public async createTask(createTaskDTO: CreateTaskDTO): Promise<Task> {
     const { title, description } = createTaskDTO;
 
-    const task = this.taskRepository.create({
+    const task: Task = this.taskRepository.create({
       title,
       description,
       status: TaskStatus.OPEN
