@@ -1,7 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { AuthErrors } from './auth-errors.enum';
+import { AUTH_ERROR_MESSAGES } from './auth.const';
 import { AuthCredentialsDTO } from './dto/auth-credentials.dto';
 import { User } from './user.entity';
 
@@ -22,6 +28,14 @@ export class UserRepository {
       password
     });
 
-    await this.userRepository.save(user);
+    await this.userRepository.save(user).catch((error) => {
+      if (error.code === AuthErrors.DUPLICATE_USERNAME) {
+        throw new ConflictException(
+          AUTH_ERROR_MESSAGES[AuthErrors.DUPLICATE_USERNAME]
+        );
+      } else {
+        throw new InternalServerErrorException();
+      }
+    });
   }
 }

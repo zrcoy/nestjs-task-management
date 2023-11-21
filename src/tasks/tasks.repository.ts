@@ -6,6 +6,7 @@ import { GetTasksFilterDTO } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDTO } from './dto/update-task-status.dto';
 import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
+import { TASK_ERROR_MESSAGES } from './tasks.const';
 
 @Injectable()
 export class TaskRepository {
@@ -31,7 +32,7 @@ export class TaskRepository {
   public async getTaskById(id: string): Promise<Task> {
     const found = await this.taskRepository.findOne({ where: { id: id } });
     if (!found) {
-      throw new NotFoundException(`Task with ID: ${id} not found.`);
+      throw new NotFoundException(TASK_ERROR_MESSAGES.TASK_NOT_FOUND(id));
     }
     return found;
   }
@@ -40,7 +41,7 @@ export class TaskRepository {
     const result = await this.taskRepository.delete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Task with ID: ${id} not found.`);
+      throw new NotFoundException(TASK_ERROR_MESSAGES.TASK_NOT_FOUND(id));
     }
   }
 

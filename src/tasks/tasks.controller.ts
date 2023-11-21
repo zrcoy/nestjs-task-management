@@ -13,9 +13,10 @@ import { CreateTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDTO } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDTO } from './dto/update-task-status.dto';
 import { Task } from './task.entity';
+import { TASK_ROUTES } from './tasks.const';
 import { TasksService } from './tasks.service';
 
-@Controller('tasks')
+@Controller(TASK_ROUTES.TASK_ROOT)
 export class TasksController {
   public constructor(private readonly tasksService: TasksService) {}
 
@@ -31,19 +32,19 @@ export class TasksController {
     return this.tasksService.createTask(createTaskDTO);
   }
 
-  @Get('/:id')
-  public getTaskById(@Param('id') id: string): Promise<Task> {
+  @Get(TASK_ROUTES.TASK_ID)
+  public getTaskById(@Param(TASK_ROUTES.TASK_ID) id: string): Promise<Task> {
     return this.tasksService.getTaskById(id);
   }
 
-  @Delete('/:id')
-  public deleteTaskById(@Param('id') id: string): Promise<void> {
+  @Delete(TASK_ROUTES.TASK_ID)
+  public deleteTaskById(@Param(TASK_ROUTES.TASK_ID) id: string): Promise<void> {
     return this.tasksService.deleteTaskById(id);
   }
 
-  @Patch('/:id/status')
+  @Patch(TASK_ROUTES.TASK_UPDATE_STATUS)
   public updateTaskStatusById(
-    @Param('id') id: string,
+    @Param(TASK_ROUTES.TASK_ID) id: string,
     @Body() updateStatusDTO: UpdateTaskStatusDTO
   ): Promise<Task> {
     return this.tasksService.updateTaskStatusById(id, updateStatusDTO);
