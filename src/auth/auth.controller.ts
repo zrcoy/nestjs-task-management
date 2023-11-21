@@ -8,9 +8,14 @@ export class AuthController {
   public constructor(private readonly authService: AuthService) {}
 
   @Post(AUTH_ROUTES.AUTH_SIGN_UP)
-  public createUser(
-    @Body() authCredentialsDTO: AuthCredentialsDTO
-  ): Promise<void> {
+  public signUp(@Body() authCredentialsDTO: AuthCredentialsDTO): Promise<void> {
     return this.authService.signUp(authCredentialsDTO);
+  }
+
+  @Post(AUTH_ROUTES.AUTH_SIGN_IN)
+  public signIn(
+    @Body() authCredentialsDTO: AuthCredentialsDTO
+  ): Promise<string> {
+    return this.authService.signIn(authCredentialsDTO);
   }
 }

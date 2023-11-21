@@ -6,5 +6,6 @@ export const AUTH_ERROR_MESSAGES: Record<AuthErrors, string> = {
 
 export const AUTH_ROUTES = {
   AUTH_ROOT: 'auth',
-  AUTH_SIGN_UP: '/signup'
+  AUTH_SIGN_UP: '/signup',
+  AUTH_SIGN_IN: '/signin'
 };
