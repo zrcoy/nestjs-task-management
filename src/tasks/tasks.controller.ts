@@ -11,6 +11,8 @@ import {
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDTO } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDTO } from './dto/update-task-status.dto';
@@ -25,31 +27,42 @@ export class TasksController {
 
   @Get()
   public getTasks(
-    @Query() getTaskFilterDTO: GetTasksFilterDTO
+    @Query() getTaskFilterDTO: GetTasksFilterDTO,
+    @GetUser() user: User
   ): Promise<Task[]> {
-    return this.tasksService.getTasks(getTaskFilterDTO);
+    return this.tasksService.getTasks(getTaskFilterDTO, user);
   }
 
   @Post()
-  public createTask(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
-    return this.tasksService.createTask(createTaskDTO);
+  public createTask(
+    @Body() createTaskDTO: CreateTaskDTO,
+    @GetUser() user: User
+  ): Promise<Task> {
+    return this.tasksService.createTask(createTaskDTO, user);
   }
 
   @Get(TASK_ROUTES.TASK_ID)
-  public getTaskById(@Param(TASK_PARAMS.ID) id: string): Promise<Task> {
-    return this.tasksService.getTaskById(id);
+  public getTaskById(
+    @Param(TASK_PARAMS.ID) id: string,
+    @GetUser() user: User
+  ): Promise<Task> {
+    return this.tasksService.getTaskById(id, user);
   }
 
   @Delete(TASK_ROUTES.TASK_ID)
-  public deleteTaskById(@Param(TASK_PARAMS.ID) id: string): Promise<void> {
-    return this.tasksService.deleteTaskById(id);
+  public deleteTaskById(
+    @Param(TASK_PARAMS.ID) id: string,
+    @GetUser() user: User
+  ): Promise<void> {
+    return this.tasksService.deleteTaskById(id, user);
   }
 
   @Patch(TASK_ROUTES.TASK_UPDATE_STATUS)
   public updateTaskStatusById(
     @Param(TASK_PARAMS.ID) id: string,
-    @Body() updateStatusDTO: UpdateTaskStatusDTO
+    @Body() updateStatusDTO: UpdateTaskStatusDTO,
+    @GetUser() user: User
   ): Promise<Task> {
-    return this.tasksService.updateTaskStatusById(id, updateStatusDTO);
+    return this.tasksService.updateTaskStatusById(id, updateStatusDTO, user);
   }
 }
