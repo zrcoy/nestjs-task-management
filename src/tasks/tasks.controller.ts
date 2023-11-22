@@ -37,13 +37,11 @@ export class TasksController {
 
   @Get(TASK_ROUTES.TASK_ID)
   public getTaskById(@Param(TASK_PARAMS.ID) id: string): Promise<Task> {
-    console.log({ idInControllerGet: id });
     return this.tasksService.getTaskById(id);
   }
 
   @Delete(TASK_ROUTES.TASK_ID)
   public deleteTaskById(@Param(TASK_PARAMS.ID) id: string): Promise<void> {
-    console.log({ idInController: id });
     return this.tasksService.deleteTaskById(id);
   }
 

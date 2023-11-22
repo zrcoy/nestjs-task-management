@@ -23,7 +23,7 @@ export class TasksService {
 
     if (search) {
       query.andWhere(
-        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)',
+        '(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))',
         { search: `%${search}%` }
       );
     }
@@ -55,9 +55,7 @@ export class TasksService {
   }
 
   public async deleteTaskById(id: string): Promise<void> {
-    console.log({ id });
     const result = await this.taskRepository.delete(id);
-    console.log({ result });
     if (result.affected === 0) {
       throw new NotFoundException(TASK_ERROR_MESSAGES.TASK_NOT_FOUND(id));
     }
