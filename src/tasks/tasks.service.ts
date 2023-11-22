@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/user.entity';
 import { Repository } from 'typeorm';
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDTO } from './dto/get-tasks-filter.dto';
@@ -14,9 +15,16 @@ export class TasksService {
     @InjectRepository(Task) private taskRepository: Repository<Task>
   ) {}
 
-  public async getTasks(filterDto: GetTasksFilterDTO): Promise<Task[]> {
+  public async getTasks(
+    filterDto: GetTasksFilterDTO,
+    user: User
+  ): Promise<Task[]> {
     const { status, search } = filterDto;
-    const query = this.taskRepository.createQueryBuilder('task');
+
+    const query = this.taskRepository
+      .createQueryBuilder('task')
+      .where({ user });
+
     if (status) {
       query.andWhere('task.status = :status', { status });
     }
@@ -32,13 +40,17 @@ export class TasksService {
     return tasks;
   }
 
-  public async createTask(createTaskDTO: CreateTaskDTO): Promise<Task> {
+  public async createTask(
+    createTaskDTO: CreateTaskDTO,
+    user: User
+  ): Promise<Task> {
     const { title, description } = createTaskDTO;
 
     const task: Task = this.taskRepository.create({
       title,
       description,
-      status: TaskStatus.OPEN
+      status: TaskStatus.OPEN,
+      user
     });
 
     await this.taskRepository.save(task);

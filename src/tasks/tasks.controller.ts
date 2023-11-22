@@ -11,6 +11,8 @@ import {
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDTO } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDTO } from './dto/update-task-status.dto';
@@ -25,14 +27,18 @@ export class TasksController {
 
   @Get()
   public getTasks(
-    @Query() getTaskFilterDTO: GetTasksFilterDTO
+    @Query() getTaskFilterDTO: GetTasksFilterDTO,
+    @GetUser() user: User
   ): Promise<Task[]> {
-    return this.tasksService.getTasks(getTaskFilterDTO);
+    return this.tasksService.getTasks(getTaskFilterDTO, user);
   }
 
   @Post()
-  public createTask(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
-    return this.tasksService.createTask(createTaskDTO);
+  public createTask(
+    @Body() createTaskDTO: CreateTaskDTO,
+    @GetUser() user: User
+  ): Promise<Task> {
+    return this.tasksService.createTask(createTaskDTO, user);
   }
 
   @Get(TASK_ROUTES.TASK_ID)
