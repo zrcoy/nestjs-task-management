@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -9,13 +10,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { AuthErrors } from './auth-errors.enum';
-import { AUTH_ERROR_MESSAGES } from './auth.const';
+import { AUTH_MESSAGES } from './auth.const';
 import { AuthCredentialsDTO } from './dto/auth-credentials.dto';
 import { JwtPayload } from './jwt-payload.interface';
 import { User } from './user.entity';
 
 @Injectable()
 export class AuthService {
+  private logger = new Logger('AuthService', { timestamp: true });
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService
@@ -36,9 +38,13 @@ export class AuthService {
     await this.userRepository.save(user).catch((error) => {
       if (error.code === AuthErrors.DUPLICATE_USERNAME) {
         throw new ConflictException(
-          AUTH_ERROR_MESSAGES[AuthErrors.DUPLICATE_USERNAME]
+          AUTH_MESSAGES.error[AuthErrors.DUPLICATE_USERNAME]
         );
       } else {
+        this.logger.error(
+          AUTH_MESSAGES.error.FAILED_TO_SIGN_UP(username),
+          error.stack
+        );
         throw new InternalServerErrorException();
       }
     });
@@ -54,7 +60,7 @@ export class AuthService {
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };
     } else {
-      throw new UnauthorizedException('Invalid username or password');
+      throw new UnauthorizedException(AUTH_MESSAGES.error.INVALID_CREDENTIALS);
     }
   }
 }
