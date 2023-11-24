@@ -10,5 +10,5 @@
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
   "files.eol": "\n",
-  "cSpell.words": ["nestjs", "typeorm", "uuidv"]
+  "cSpell.words": ["intercepter", "nestjs", "typeorm", "uuidv"]
 }
